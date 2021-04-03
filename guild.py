@@ -32,6 +32,8 @@ def on_message(ws, message):
 		for guild in data['d']['guilds']:
 			print('\n'+guild['name'])
 			channel_id = int(input("Channel: "))
+			if not channel_id:
+				continue
 			newGuild = G_DataBase(guild['id'], channel_id)
 			newGuild.GoToDB()
 			print("Guild added")
