@@ -2,6 +2,7 @@ import os
 import json
 import websocket
 from time import sleep
+from multiprocessing import Process
 from database import DataBase, G_DataBase
 from dotenv import load_dotenv; load_dotenv()
 
@@ -9,6 +10,7 @@ count = 0
 online_count = 0
 guild_id = ''
 channel_id = ''
+timeout = None
 token = os.getenv("Token")
 
 def fetch():
@@ -26,6 +28,9 @@ def fetch():
             print("Getting ready for the next guild...")
             sleep(4)
 
+def stop_chunk(ws):
+    ws.send("close")
+
 def on_open(ws):
     print("WebSocket connection established")
     Auth = {
@@ -40,6 +45,7 @@ def on_open(ws):
 def on_message(ws, message):
     global count
     global online_count
+    global timeout
     data = json.loads(message)
 
     if data['op'] == 0 and data['t'] == 'READY':
@@ -75,7 +81,12 @@ def on_message(ws, message):
                 else:
                     #ws.send("close")
                     ws.send(json.dumps({"op":8,"d":{"guild_id":[guild_id],"query":"","limit":1000000,"presences":False}}))
+                    timeout = Process(target=stop_chunk, args=(ws,))
+                    timeout.start()
+                    timeout.json(timeout=7)
+
     elif data['op'] == 0 and data['t'] == 'GUILD_MEMBERS_CHUNK':
+        timeout.terminate()
         print("Getting members chunk...")
         for member in data['d']['members']:
             add(member['user'])
