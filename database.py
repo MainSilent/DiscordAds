@@ -70,3 +70,8 @@ class G_DataBase:
         with conn:
             c.execute("SELECT * FROM guilds")
             return len(c.fetchall())
+
+    @classmethod
+    def truncate(self):
+        with conn:
+            c.execute("DELETE FROM guilds")

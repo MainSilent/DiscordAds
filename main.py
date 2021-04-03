@@ -1,10 +1,11 @@
 from user import User
 from database import DataBase, G_DataBase
 from channel import fetch
+from guild import guild
 
 print(f"{G_DataBase.Count()} Guilds")
 print(f"{DataBase.Count()} Users\n")
-print("1- Add new guild")
+print("1- Get guilds")
 print("2- Fetch users from guilds")
 print("3- Send message to users")
 print("4- Reset sent data")
@@ -12,12 +13,7 @@ print("4- Reset sent data")
 choice = int(input("Choose by number: "))
 
 if choice == 1:
-	while True:
-		guild_id = input("\nGuild: ")
-		channel_id = input("Channel: ")
-		newGuild = G_DataBase(guild_id, channel_id)
-		newGuild.GoToDB()
-		print("Data added")
+	guild()
 elif choice == 2:
 	fetch()
 elif choice == 3:
