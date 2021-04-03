@@ -58,13 +58,7 @@ def on_message(ws, message):
                 online_count = int(data['d']['online_count'])
                 for item in op['items']:
                     try:
-                        user = item['member']['user']
-                        id = user['id']
-                        if 'bot' not in user.keys() and not DataBase.Status(id):
-                            username = user['username']
-                            print(f"Adding {username} to database")
-                            newUser = DataBase(username, id, 0)
-                            newUser.GoToDB()
+                        add(item['member']['user'])
                     except:
                         pass
                 if count*100 <= online_count:
@@ -79,4 +73,17 @@ def on_message(ws, message):
                     }
                     ws.send(json.dumps(getUsers))
                 else:
-                    ws.send("close")
+                    #ws.send("close")
+                    ws.send(json.dumps({"op":8,"d":{"guild_id":[guild_id],"query":"","limit":1000000,"presences":False}}))
+    elif data['op'] == 0 and data['t'] == 'GUILD_MEMBERS_CHUNK':
+        print("Getting members chunk...")
+        for member in data['d']['members']:
+            add(member['user'])
+
+def add(user):
+    id = user['id']
+    if 'bot' not in user.keys() and not DataBase.Status(id):
+        username = user['username']
+        print(f"Adding {username} to database")
+        newUser = DataBase(username, id, 0)
+        newUser.GoToDB()
