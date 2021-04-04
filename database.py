@@ -42,11 +42,22 @@ class DataBase:
             return len(c.fetchall())
 
     @classmethod
+    def nCount(self):
+        with conn:
+            c.execute("SELECT * FROM Users WHERE send = 0")
+            return len(c.fetchall())
+
+    @classmethod
     def Reset(self):
         value = 0
         with conn:
             c.execute(f"UPDATE Users SET send = {value}")
             print("Reset is Done!")
+
+    @classmethod
+    def truncate(self):
+        with conn:
+            c.execute("DELETE FROM users")
 
 
 
