@@ -5,7 +5,7 @@ from database import DataBase, G_DataBase
 from dotenv import load_dotenv; load_dotenv()
 from database import G_DataBase
 
-token = ""
+token = os.getenv("token")
 
 def guild():
 	G_DataBase.truncate()
