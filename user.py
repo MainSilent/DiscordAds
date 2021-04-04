@@ -8,6 +8,9 @@ token = ""
 with open("embed.json", "r") as f:
     embed = json.load(f)
 
+def change_token():
+    ...
+
 class User:
     def __init__(self, id):
         self.id = id

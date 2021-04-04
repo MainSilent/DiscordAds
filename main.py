@@ -1,4 +1,4 @@
-from user import User
+from user import User, change_token
 from database import DataBase, G_DataBase
 from channel import fetch
 from guild import guild
@@ -17,16 +17,18 @@ if choice == 1:
 elif choice == 2:
 	fetch()
 elif choice == 3:
-	for idx, user in enumerate(DataBase.GetFromDB()):
-		if idx == 4:
-			break
+	lst = DataBase.GetFromDB()
+	for users in [lst[i:i + 4] for i in range(0, len(lst), 4)]:
+		for user in users:
+			message = User(user[2])
 
-		message = User(user[2])
-		if not int(user[3]) and message.create() and message.send():
-			DataBase.SendUpdate(user[2])
-			print(f"Sending to {user[1]} "+"\033[32m"+"Success"+"\033[0m")
-		elif not int(user[3]):
-			print(f"Sending to {user[1]} "+"\033[31m"+"Failed"+"\033[0m")
+			if not int(user[3]) and message.create() and message.send():
+				DataBase.SendUpdate(user[2])
+				print(f"Sending to {user[1]} "+"\033[32m"+"Success"+"\033[0m")
+			elif not int(user[3]):
+				print(f"Sending to {user[1]} "+"\033[31m"+"Failed"+"\033[0m")
+
+		change_token()
 elif choice == 4:
 	print("Reseting...")
 	DataBase.Reset()
