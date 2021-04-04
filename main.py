@@ -28,6 +28,7 @@ elif choice == 3:
 			elif not int(user[3]):
 				print(f"Sending to {user[1]} "+"\033[31m"+"Failed"+"\033[0m")
 
+		print("Changing token...")
 		change_token()
 elif choice == 4:
 	print("Reseting...")

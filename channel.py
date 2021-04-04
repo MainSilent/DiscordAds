@@ -11,7 +11,7 @@ online_count = 0
 guild_id = ''
 channel_id = ''
 timeout = None
-token = os.getenv("Token")
+token = os.getenv("token")
 
 def fetch():
     for idx, guild in enumerate(G_DataBase.GetFromDB()):

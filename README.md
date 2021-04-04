@@ -1,2 +1,0 @@
-# DiscordAds
-mmd xD
