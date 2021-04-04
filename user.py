@@ -3,8 +3,10 @@ import json
 import requests
 from dotenv import load_dotenv; load_dotenv()
 
-token = os.getenv("Token")
-message = os.getenv("Message")
+token = ""
+
+with open("embed.json", "r") as f:
+    embed = json.load(f)
 
 class User:
     def __init__(self, id):
@@ -31,7 +33,7 @@ class User:
     def send(self):
         try:
             url = f"https://discord.com/api/v8/channels/{self.channel_id}/messages"
-            payload = json.dumps({ 'content': message })
+            payload = json.dumps({ 'embed': embed })
             headers = {
                 'authorization': token,
                 'Content-Type': 'application/json'
