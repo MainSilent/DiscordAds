@@ -1,4 +1,4 @@
-from user import User, change_token
+from user import User
 from database import DataBase, G_DataBase
 from channel import fetch
 from guild import guild
