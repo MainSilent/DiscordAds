@@ -23,19 +23,24 @@ def start_friend_requests():
     # Send friend requests
     for user in DataBase.GetFromDB():
         if count == 24:
-            break
             print("Sending friend requests done.")
-
+            break
+            
         if not int(user[3]):
             result = send_request(user[2])
             if result == True:
                 print(f"Sending Friend Request to {user[1]} "+"\033[32m"+"Success"+"\033[0m")
+                DataBase.SendUpdate(user[2], 1)
             elif result == 80000:
                 print(f"{user[1]} - "+"\033[31m"+"Has Blocked Friend Requests"+"\033[0m")
+                DataBase.SendUpdate(user[2], 1)
+            elif result == 'ban':
+                print("\033[31m"+"\nUser has been banned\n"+"\033[0m")
+                p.terminate()
+                exit()
             else:
                 print(f"Sending Friend Request to {user[1]} "+"\033[31m"+"Failed"+"\033[0m")
 
-            DataBase.SendUpdate(user[2], 1)
             count += 1
             sleep(10)
 
@@ -53,6 +58,8 @@ def send_request(user_id):
         return True
     elif json.loads(response.text)['code'] == 80000:
         return 80000
+    elif json.loads(response.text)['code'] == 40002:
+        return 'ban'
     else:
         return False
 
