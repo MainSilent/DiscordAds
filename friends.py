@@ -36,5 +36,5 @@ def on_message(ws, message):
         if message.send(channel_id):
             DataBase.SendUpdate(user[2], 2)
             print(f"Sending to {username} "+"\033[32m"+"Success"+"\033[0m")
-        elif:
+        else:
             print(f"Sending to {username} "+"\033[31m"+"Failed"+"\033[0m")
