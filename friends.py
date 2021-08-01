@@ -13,6 +13,11 @@ token = os.getenv("Token")
 def start_friend_requests():
     global count
 
+    # Listen for channel creation events
+    ws = websocket.WebSocketApp('wss://gateway.discord.gg/?encoding=json&v=8', on_open=on_open, on_message=on_message)
+    p = Process(target=ws.run_forever)
+    p.start()
+
     # Send friend requests
     for user in DataBase.GetFromDB():
         if count == 24:
@@ -31,11 +36,6 @@ def start_friend_requests():
             DataBase.SendUpdate(user[2], 1)
             count += 1
             sleep(10)
-
-    # Listen for channel creation events
-    ws = websocket.WebSocketApp('wss://gateway.discord.gg/?encoding=json&v=8',
-                                on_open=on_open, on_message=on_message)
-    ws.run_forever()
 
 def send_request(user_id):
     url = f"https://discord.com/api/v9/users/@me/relationships/{user_id}"
