@@ -18,6 +18,8 @@ def start_friend_requests():
     p = Process(target=ws.run_forever)
     p.start()
 
+    sleep(4)
+
     # Send friend requests
     for user in DataBase.GetFromDB():
         if count == 24:
