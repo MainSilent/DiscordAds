@@ -11,6 +11,8 @@ count = 0
 token = os.getenv("Token")
 
 def start_friend_requests():
+    global count
+
     # Send friend requests
     for user in DataBase.GetFromDB():
         if count == 24:
@@ -41,7 +43,6 @@ def send_request(user_id):
     }
     response = requests.request("PUT", url, headers=headers, data=payload)
     if response.status_code == 204:
-        DataBase.SendUpdate(user_id, 2)
         return True
     else:
         return False
