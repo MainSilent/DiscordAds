@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import websocket
+import threading
 from time import sleep
 from user import User
 from multiprocessing import Process
@@ -17,8 +18,8 @@ def start_friend_requests():
     ws = websocket.WebSocketApp('wss://gateway.discord.gg/?encoding=json&v=8', on_open=on_open, on_message=on_message)
     p = Process(target=ws.run_forever)
     p.start()
-
-    sleep(4)
+    
+    sleep(8)
 
     # Send friend requests
     for user in DataBase.GetFromDB():
@@ -76,6 +77,11 @@ def on_open(ws):
 
 def on_message(ws, message):
     data = json.loads(message)
+
+    if data['op'] == 10:
+        t = threading.Thread(target=heartbeat, args=(ws))
+        t.start()
+
     if data['t'] == "CHANNEL_CREATE":
         d = data['d']
         user_id = d['recipients'][0]['id']
@@ -88,3 +94,10 @@ def on_message(ws, message):
             print(f"Sending Message to {username} "+"\033[32m"+"Success"+"\033[0m")
         else:
             print(f"Sending Message to {username} "+"\033[31m"+"Failed"+"\033[0m")
+
+def heartbeat(ws):
+    while True:
+        ws.send(json.dumps({
+            op: 1
+        }))
+        sleep(10)
