@@ -24,7 +24,7 @@ def start_friend_requests():
             if result == True:
                 print(f"Sending Friend Request to {user[1]} "+"\033[32m"+"Success"+"\033[0m")
             elif result == 80000:
-                print("\033[31m"+f"{user[1]} Has Blocked friend requests"+"\033[0m")
+                print(f"{user[1]} - "+"\033[31m"+"Has Blocked Friend Requests"+"\033[0m")
             else:
                 print(f"Sending Friend Request to {user[1]} "+"\033[31m"+"Failed"+"\033[0m")
 
