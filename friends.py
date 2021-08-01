@@ -21,11 +21,15 @@ def start_friend_requests():
 
         if not int(user[3]):
             DataBase.SendUpdate(user[2], 1)
-            if send_request(user[2]):
+            result = send_request(user[2])
+            if result == True:
                 print(f"Sending Friend Request to {user[1]} "+"\033[32m"+"Success"+"\033[0m")
+            elif result == 80000:
+                print("\033[31m"+f"{user[1]} Has Blocked friend requests"+"\033[0m")
             else:
                 print(f"Sending Friend Request to {user[1]} "+"\033[31m"+"Failed"+"\033[0m")
             count += 1
+            time.sleep(10)
 
     # Listen for channel creation events
     ws = websocket.WebSocketApp('wss://gateway.discord.gg/?encoding=json&v=8',
@@ -44,6 +48,8 @@ def send_request(user_id):
     response = requests.request("PUT", url, headers=headers, data=payload)
     if response.status_code == 204:
         return True
+    elif json.loads(response.text)['code'] == 80000:
+        return 80000
     else:
         return False
 
