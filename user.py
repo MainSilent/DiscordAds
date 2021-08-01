@@ -28,7 +28,10 @@ class User:
             return False
 
     # send the message
-    def send(self):
+    def send(self, channel_id=None):
+        if channel_id:
+            self.channel_id = channel_id
+
         try:
             url = f"https://discord.com/api/v8/channels/{self.channel_id}/messages"
             payload = json.dumps({ 'content': message })

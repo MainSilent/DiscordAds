@@ -2,6 +2,7 @@ import os
 import json
 import websocket
 from time import sleep
+from user import User
 from multiprocessing import Process
 from database import DataBase
 
@@ -25,3 +26,15 @@ def on_open(ws):
 
 def on_message(ws, message):
     data = json.loads(message)
+    if data['t'] == "CHANNEL_CREATE":
+        d = data['d']
+        user_id = d['recipients'][0]['id']
+        username = d['recipients'][0]['username']
+        channel_id = d['id']
+
+        message = User(user_id)
+        if message.send(channel_id):
+            DataBase.SendUpdate(user[2], 2)
+            print(f"Sending to {username} "+"\033[32m"+"Success"+"\033[0m")
+        elif:
+            print(f"Sending to {username} "+"\033[31m"+"Failed"+"\033[0m")

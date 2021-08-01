@@ -21,8 +21,7 @@ class DataBase:
 
 
     @classmethod
-    def SendUpdate(self,uID):
-        value = 1
+    def SendUpdate(self,uID, value):
         with conn:
             c.execute(f"UPDATE Users SET send = {value} WHERE uID = {uID}")
     
