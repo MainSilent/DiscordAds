@@ -7,17 +7,23 @@ from user import User
 from multiprocessing import Process
 from database import DataBase
 
+count = 0
 token = os.getenv("Token")
 
 def start_friend_requests():
     # Send friend requests
     for user in DataBase.GetFromDB():
+        if count == 24:
+            break
+            print("Sending friend requests done.")
+
         if not int(user[3]):
             DataBase.SendUpdate(user[2], 1)
             if send_request(user[2])
                 print(f"Sending Friend Request to {user[1]} "+"\033[32m"+"Success"+"\033[0m")
             else:
                 print(f"Sending Friend Request to {user[1]} "+"\033[31m"+"Failed"+"\033[0m")
+            count += 1
 
     # Listen for channel creation events
     ws = websocket.WebSocketApp('wss://gateway.discord.gg/?encoding=json&v=8',
