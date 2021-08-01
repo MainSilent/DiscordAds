@@ -79,7 +79,7 @@ def on_message(ws, message):
     data = json.loads(message)
 
     if data['op'] == 10:
-        t = threading.Thread(target=heartbeat, args=(ws))
+        t = threading.Thread(target=heartbeat, args=(ws,))
         t.start()
 
     if data['t'] == "CHANNEL_CREATE":
@@ -98,6 +98,6 @@ def on_message(ws, message):
 def heartbeat(ws):
     while True:
         ws.send(json.dumps({
-            op: 1
+            'op': 1
         }))
         sleep(10)
