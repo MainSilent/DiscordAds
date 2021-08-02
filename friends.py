@@ -15,7 +15,7 @@ def start_friend_requests():
     global count
 
     # Listen for channel creation events
-    ws = websocket.WebSocketApp('wss://gateway.discord.gg/?encoding=json&v=8', on_open=on_open, on_message=on_message)
+    ws = websocket.WebSocketApp('wss://gateway.discord.gg/?encoding=json&v=8', on_open=on_open, on_message=on_message, on_close=on_close)
     p = Process(target=ws.run_forever)
     p.start()
     
@@ -94,6 +94,9 @@ def on_message(ws, message):
             print(f"Sending Message to {username} "+"\033[32m"+"Success"+"\033[0m")
         else:
             print(f"Sending Message to {username} "+"\033[31m"+"Failed"+"\033[0m")
+
+def on_close(ws, close_status_code, close_msg):
+    print("\033[31m"+"Connection Closed"+"\033[0m")
 
 def heartbeat(ws):
     last_beat = 7000
