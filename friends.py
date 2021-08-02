@@ -96,8 +96,11 @@ def on_message(ws, message):
             print(f"Sending Message to {username} "+"\033[31m"+"Failed"+"\033[0m")
 
 def heartbeat(ws):
+    last_beat = 7000
     while True:
         ws.send(json.dumps({
-            'op': 1
+            'op': 1,
+            'd': last_beat
         }))
-        sleep(10)
+        sleep(7)
+        last_beat += 7000
