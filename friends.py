@@ -20,7 +20,7 @@ def start_friend_requests():
     p = Process(target=ws.run_forever)
     p.start()
     
-    sleep(8)
+    sleep(5)
 
     # Send friend requests
     for user in DataBase.GetFromDB():
