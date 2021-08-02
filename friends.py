@@ -9,6 +9,7 @@ from multiprocessing import Process
 from database import DataBase
 
 count = 0
+last_beat = 7000
 token = os.getenv("Token")
 
 def start_friend_requests():
@@ -76,7 +77,15 @@ def on_open(ws):
     ws.send(json.dumps(Auth))
 
 def on_message(ws, message):
+    global last_beat
     data = json.loads(message)
+
+    if data['op'] == 1:
+        ws.send(json.dumps({
+            'op': 1,
+            'd': last_beat
+        }))
+        last_beat += 7000
 
     if data['op'] == 10:
         t = threading.Thread(target=heartbeat, args=(ws,))
@@ -99,7 +108,8 @@ def on_close(ws, close_status_code, close_msg):
     print("\033[31m"+"Connection Closed"+"\033[0m")
 
 def heartbeat(ws):
-    last_beat = 7000
+    global last_beat
+
     while True:
         ws.send(json.dumps({
             'op': 1,
