@@ -24,7 +24,7 @@ elif choice == 3:
 		message = User(user[2])
 
 		if not int(user[3]) and message.create() and message.send():
-			DataBase.SendUpdate(user[2])
+			DataBase.SendUpdate(user[2], 1)
 			print(f"Sending to {user[1]} "+"\033[32m"+"Success"+"\033[0m")
 		elif not int(user[3]):
 			print(f"Sending to {user[1]} "+"\033[31m"+"Failed"+"\033[0m")
